@@ -1,10 +1,18 @@
 import { FontAwesome, FontAwesome5, FontAwesome6 } from '@expo/vector-icons';
 import { Stack } from 'expo-router';
+import { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Colors } from '~/constants/Colors';
 
 const Home = () => {
+  const [input, setInput] = useState('');
+  const [output, setOutput] = useState('');
+
+  const onTranslate = () => {
+    const translation = input;
+    setOutput(translation);
+  };
   return (
     <>
       <Stack.Screen options={{ title: 'Home', headerTitleAlign: 'center' }} />
@@ -25,6 +33,8 @@ const Home = () => {
           {/* Input */}
 
           <TextInput
+            value={input}
+            onChangeText={setInput}
             placeholder="Enter Your Text"
             multiline
             numberOfLines={4}
@@ -35,7 +45,12 @@ const Home = () => {
           {/* Send Button */}
 
           <View style={styles.sendIcon}>
-            <FontAwesome name="arrow-circle-right" size={30} color={Colors.light.primary} />
+            <FontAwesome
+              onPress={onTranslate}
+              name="arrow-circle-right"
+              size={30}
+              color={Colors.light.primary}
+            />
           </View>
         </View>
 
@@ -43,19 +58,21 @@ const Home = () => {
 
         <View style={styles.microphoneContainer}>
           <FontAwesome name="microphone" size={18} color={Colors.light.secondary} />
-          <Text style={styles.microphoneText}>0/5000</Text>
+          <Text style={styles.microphoneText}>{input.length}/5000</Text>
         </View>
         <View style={styles.line} />
       </View>
 
       {/* Output container */}
-      <View style={styles.outputContainer}>
-        <Text style={styles.outputText}>OutPut</Text>
-        <View style={styles.outputIcons}>
-          <FontAwesome6 name="volume-high" size={18} color={Colors.light.primary} />
-          <FontAwesome5 name="copy" size={18} color={Colors.light.primary} />
+      {output && (
+        <View style={styles.outputContainer}>
+          <Text style={styles.outputText}>{output}</Text>
+          <View style={styles.outputIcons}>
+            <FontAwesome6 name="volume-high" size={18} color={Colors.light.primary} />
+            <FontAwesome5 name="copy" size={18} color={Colors.light.primary} />
+          </View>
         </View>
-      </View>
+      )}
     </>
   );
 };
